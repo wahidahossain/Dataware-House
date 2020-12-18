@@ -1,0 +1,306 @@
+
+
+#Check the average of all the numeric columns
+import pandas as pd
+import os
+path = "C:/Wahida/Centennial College/Semester 3/Data Warehouse & Mining/final/"
+filename = 'Supervised_4.csv'
+fullpath = os.path.join(path,filename)
+df_FinalTest = pd.read_csv(fullpath,sep=',')
+print("2.1. Print the names of columns")
+print(df_FinalTest.columns.values)
+print("2.2. Print the types of columns")
+print(df_FinalTest.dtypes)
+print("2.3. Print the unique values in each column")
+
+uniqueValues1 = df_FinalTest['model'].unique()
+uniqueValues2 = df_FinalTest['type'].unique()
+uniqueValues3 = df_FinalTest['year'].unique()
+uniqueValues4 = df_FinalTest['mileage'].unique()
+uniqueValues5 = df_FinalTest['motor'].unique()
+uniqueValues6 = df_FinalTest['value'].unique()
+uniqueValues7 = df_FinalTest['damage'].unique()
+uniqueValues8 = df_FinalTest['color'].unique()
+uniqueValues9 = df_FinalTest['stolen'].unique()
+ 
+print('Unique elements in column "Model" ')
+print(uniqueValues1)
+print('Unique elements in column "Type" ')
+print(uniqueValues2)
+print('Unique elements in column "Year" ')
+print(uniqueValues3)
+print('Unique elements in column "milege" ')
+print(uniqueValues4)
+print('Unique elements in column "Motor" ')
+print(uniqueValues5)
+print('Unique elements in column "Value" ')
+print(uniqueValues6)
+print('Unique elements in column "damage" ')
+print(uniqueValues7)
+print('Unique elements in column "colorge" ')
+print(uniqueValues8)
+print('Unique elements in column "Stolen" ')
+print(uniqueValues9)
+print('2.4. Print the statistics count, min, mean, standard deviation, 1st quartile, median, 3rd quartile max')
+#2.4. Print the statistics count, min, mean, standard deviation, 1st quartile, median, 3rd quartile max
+print("2.4. Print the statistics (use one command)")
+print(df_FinalTest.describe())
+print("2.5. Print the first two records")
+print(df_FinalTest.head(2))
+print('2.6. Print a summary of all missing values in all columns (use one command)')
+print(len(df_FinalTest.index) - df_FinalTest.count())
+print('2.7. Print the total number (count) of each class category values')
+print(df_FinalTest.count())
+print('2.8. In your own words enter below a description of the key highlights of this data-set and explain')
+
+print('3. Visualize the data ( 15 marks )')
+print('3.1 Plot a histogram for the mileage use 8 bins, name the x and y axis’ appropriately.')
+import matplotlib.pyplot as plt
+hist_FinalTest= plt.hist(df_FinalTest['mileage'],bins=9)
+plt.xlabel('mileage')
+plt.ylabel('Frequency')
+plt.title('Frequency of mileage')
+print('3.2 Create a scatterplot showing mileage versus value give the plot an appropriate title.')
+fig_FinalTest = df_FinalTest.plot(kind='scatter',x='mileage',y='stolen')
+
+print("3.3 Plot a scatter matrix showing the relationship between all columns of the dataset on the diagonal of the matrix plot the kernel density function.")
+import numpy as np
+df = pd.DataFrame(np.random.randn(1000, 4), columns=['model','type','year','stolen'])
+pd.plotting.scatter_matrix(df, alpha=0.2)
+
+print("3.4 Create a boxplot for the “value” column; give the plot an appropriate title.")
+
+import matplotlib.pyplot as plt
+plt.boxplot(df_FinalTest['value'])
+plt.ylabel('value')
+plt.title('Box Plot of value')
+
+print("3.5 Create a bar chart indicating stolen vehicles by type of vehicle i.e. for each type plot two bars one in red color showing the total stolen and one blue showing the total not stolen.")
+#draw a stacked bar chart of the marital status and the outcome
+table=pd.crosstab(df_FinalTest.type,df_FinalTest.stolen)
+table.div(table.sum(1).astype(float), axis=0).plot(kind='bar', stacked=True)
+plt.title('Stacked Bar Chart of Type vs Stolen')
+plt.xlabel('Type of vehicle')
+plt.ylabel('Stolen')
+
+
+print("3.6 Create a bar chart indicating stolen vehicles by type of damage i.e. for each type of damage plot two bars one in red color showing the total stolen and one blue showing the total not stolen.")
+
+table=pd.crosstab(df_FinalTest.damage,df_FinalTest.stolen)
+table.div(table.sum(1).astype(float), axis=0).plot(kind='bar', stacked=True)
+plt.title('Stacked Bar Chart of Damage vs Stolen')
+plt.xlabel('Damage')
+plt.ylabel('Stolen')
+
+print("3.7 Create a bar chart indicating stolen vehicles by year i.e. for each year plot two bars one in red color showing the total stolen and one blue showing the total not stolen.")
+
+table=pd.crosstab(df_FinalTest.year,df_FinalTest.stolen)
+table.div(table.sum(1).astype(float), axis=0).plot(kind='bar', stacked=True)
+plt.title('Stacked Bar Chart of stolen vehicles by year')
+plt.xlabel('year')
+plt.ylabel('stolen')
+
+print("3.8 Create a stacked bar chart each bar should reflect a combination of the damage type and colorand the bar stack to be split by class. (hint: In total you should have 6 bars) color the stolen ingreen and the none stolen in yellow.")
+
+table=pd.crosstab(df_FinalTest.damage,df_FinalTest.color)
+table.div(table.sum(1).astype(float), axis=0).plot(kind='bar', stacked=True)
+plt.title('Stacked Bar Chart of Damage vs Color Type')
+plt.xlabel('Damage')
+plt.ylabel('Color Type')
+
+print("3.9 In your own words enter below a description of the key findings you read from the charts you")
+
+
+
+print("4.1. Remove (drop) properly the column with the most missing values 4%")
+df_FinalTest = df_FinalTest.drop("motor", axis=1)
+
+
+
+print("4.2 Replace the missing values in the mileage column with the mean average of the column value. 4%")
+df_FinalTest['mileage'].fillna(df_FinalTest['mileage'].mean(),inplace=True)
+
+
+print("4.3 Check that there are no missing values")
+print(len(df_FinalTest) - df_FinalTest.count())
+
+
+print("4.4 Convert the all the categorical columns into numeric values and drop/delete the original columns. (hint: use get dummies) 7%")
+print("Step 9")
+categoricals = []
+for col, col_type in df_FinalTest.dtypes.iteritems():
+     if col_type == 'O':
+          categoricals.append(col)
+     else:
+          df_FinalTest[col].fillna(0, inplace=True)
+print(categoricals)
+
+print("Step 10")
+df_FinalTest_new = pd.get_dummies(df_FinalTest, columns=categoricals, dummy_na=False)
+pd.set_option('display.max_columns',30)
+print(df_FinalTest_new.head())
+print(df_FinalTest_new.columns.values)
+print(len(df_FinalTest_new) - df_FinalTest_new.count())
+
+print("4.5 Check the types of columns are numeric, if needed convert types.")
+print(df_FinalTest_new.dtypes)
+
+
+print(" 4.6 In your own words enter below the new number of columns and rows of your data
+set.")
+
+
+
+print("5. Build Predictive Model ( 20 marks ) ")
+print(" 5.1 Build a predictive model, namely a tree classifier using sklearn take into consideration the following: 20% ")
+
+
+Code:
+import pandas as pd
+import os
+path = "C:/Wahida/Centennial College/Semester 3/Data Warehouse & Mining/final"
+filename = 'Supervised_4_treedata.csv'
+fullpath = os.path.join(path,filename)
+data_final_i = pd.read_csv(fullpath,sep=',')
+print(data_final_i.columns.values)
+print(data_final_i.shape)
+print(data_final_i.describe())
+print(data_final_i.dtypes) 
+print(data_final_i.head(5))
+print(data_final_i['year'].unique())
+
+################################################################
+colnames=data_final_i.columns.values.tolist()
+predictors=colnames[:4]
+target=colnames[4]
+import numpy as np
+data_final_i['is_train'] = np.random.uniform(0, 1, len(data_final_i)) <= .75
+print(data_final_i.head(5))
+# Create two new dataframes, one with the training rows, one with the test rows
+train, test = data_final_i[data_final_i['is_train']==True], data_final_i[data_final_i['is_train']==False]
+print('Number of observations in the training data:', len(train))
+print('Number of observations in the test data:',len(test))
+
+#################################################################
+
+
+
+print(" 5.2 Name the model dt_firstname where firstname is your firstname ")
+
+Code:---------------------------------------------------------------------------------
+from sklearn.tree import DecisionTreeClassifier
+dt_final = DecisionTreeClassifier(criterion='entropy',min_samples_split=20, random_state=99)
+dt_final.fit(train[predictors], train[target])
+
+
+print("5.3 Split your data 80% for training and 20% for testing ")
+
+Code:---------------------------------------------------------------------------------
+from sklearn.tree import export_graphviz
+with open('C:/Wahida/Centennial College/Semester 3/Data Warehouse & Mining/final/Mashud/dtree3.dot', 'w') as dotfile:
+    export_graphviz(dt_final, out_file = dotfile, feature_names = predictors)
+dotfile.close()
+
+########################  data 80% for training and 20% for testing  #################
+
+X=data_final_i[predictors]
+Y=data_final_i[target]
+#split the data sklearn module
+from sklearn.model_selection import train_test_split
+trainX,testX,trainY,testY = train_test_split(X,Y, test_size = 0.2)
+
+
+print(" 5.4 Use entropy for the decisions")
+Code:---------------------------------------------------------------------------------
+
+dt1_final = DecisionTreeClassifier(criterion='entropy',max_depth=6, min_samples_split=20, random_state=99)
+dt1_final.fit(trainX,trainY)
+# 10 fold cross validation using sklearn and all the data i.e validate the data 
+from sklearn.model_selection import KFold
+#help(KFold)
+crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
+from sklearn.model_selection import cross_val_score
+score = np.mean(cross_val_score(dt1_final, trainX, trainY, scoring='accuracy', cv=crossvalidation, n_jobs=1))
+score
+
+
+print(" 5.5 Maximum depth of the tree is 6")
+Code:---------------------------------------------------------------------------------
+
+### Test the model using the testing data
+testY_predict = dt1_final.predict(testX)
+testY_predict.dtype
+#Import scikit-learn metrics module for accuracy calculation
+from sklearn import metrics 
+labels = Y.unique()
+print(labels)
+print("Accuracy:",metrics.accuracy_score(testY, testY_predict))
+#Let us print the confusion matrix
+from sklearn.metrics import confusion_matrix
+print("Confusion matrix \n" , confusion_matrix(testY, testY_predict, labels))
+
+import seaborn as sns
+import matplotlib.pyplot as plt     
+cm = confusion_matrix(testY, testY_predict, labels)
+ax= plt.subplot()
+sns.heatmap(cm, annot=True, ax = ax); #annot=True to annotate cells
+
+# labels, title and ticks
+ax.set_xlabel('Predicted labels');ax.set_ylabel('True labels'); 
+ax.set_title('Confusion Matrix'); 
+ax.xaxis.set_ticklabels(['setosa', 'versicolor', 'virginica']); ax.yaxis.set_ticklabels(['setosa', 'versicolor', 'virginica']);
+plt.show()
+
+
+print(" 5.6 Split the node only when you reach 15 observations per node.")
+Code:---------------------------------------------------------------------------------
+
+print(" 5.7 For validation use 8 -fold cross validation and print the mean of accuracy of the
+validation.")
+Code:---------------------------------------------------------------------------------
+
+
+print(" 5.8 Use the model you created using the training data to test the 20% testing data, print the:")
+print(" 5.8.1 The accuracy of the test and the confusion matrix")
+
+
+print("5.9 Prune the tree: ")
+print("5.9.1 Vary the maximum depth of your predictive model from 1 to 7 and print the mean
+accuracy of the k-fold of each run on the training data. ")
+
+
+print(" 5.9.2 Based on the results of pruning the tree recommend below the maximum
+depth and explain why you are recommending such.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

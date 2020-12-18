@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+from pylab  import rcParams
+import seaborn as sb
+
+import scipy
+from scipy.stats.stats import pearsonr
+
+import matplotlib.pyplot as plt
+
+from sklearn import datasets
+from sklearn.feature_selection import RFE
+
+data_group6=pd.read_excel('https://comp309-project-group6.s3.amazonaws.com/Attribute+DataSet.xlsx')
+
+data_group6['waiseline'].fillna(value='noSpecified', inplace=True)
+data_group6['Material'].fillna(value='other', inplace=True)
+data_group6['FabricType'].fillna(value='other', inplace=True)
+data_group6['Decoration'].fillna(value='none', inplace=True)
+data_group6['PatternType'].fillna(value='noSpecified', inplace=True)
+
+data_group6 = data_group6.dropna(how='any')
+fullpath = 'https://comp309-project-group6.s3.amazonaws.com/Attribute+DataSet.xlsx'
+data_mayy_b = pd.read_excel(fullpath,sep=';')
+print(data_mayy_b.columns.values)
+print(data_mayy_b.shape)
+print(data_mayy_b.describe())
+print(data_mayy_b.dtypes) 
+print(data_mayy_b.head(2))
+print(data_mayy_b['Dress_ID'].unique())
+
+import numpy as np
+data_mayy_b['Dress_ID']=np.where(data_mayy_b['Style'] =='Casual', 'Sexy', data_mayy_b['Style'])
